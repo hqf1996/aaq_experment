@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<assembly>
+    <id>2.0</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/classes</directory>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+
+        <dependencySet>
+            <!--
+               不使用项目的artifact，第三方jar不要解压，打包进外部依赖jar文件的lib目录
+           -->
+            <useProjectArtifact>true</useProjectArtifact>
+            <outputDirectory>lib</outputDirectory>
+            <unpack>false</unpack>
+            <includes>
+                <include>org.jsoup:*</include>
+            </includes>
+            <scope>compile</scope>
+
+        </dependencySet>
+
+    </dependencySets>
+</assembly>
