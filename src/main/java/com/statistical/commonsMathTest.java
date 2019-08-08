@@ -32,8 +32,10 @@ public class commonsMathTest {
         Product product = new Product();
         /*和*/
         Sum sum = new Sum();
-        /*方差*/
-        Variance variance = new Variance();
+        /*标准方差*/
+        Variance variance1 = new Variance(false);
+        /*样本方差*/
+        Variance variance2 = new Variance();
         /*平方和*/
         SumOfSquares sumOfSquares = new SumOfSquares();
         /*标准差*/
@@ -43,14 +45,16 @@ public class commonsMathTest {
 //        System.out.println(mean.evaluate(values));
 //        System.out.println(product.evaluate(values));
 //        System.out.println(sum.evaluate(values));
-//        System.out.println(variance.evaluate(values));
+        System.out.println(variance1.evaluate(values));
+        System.out.println(variance2.evaluate(values));
 //        System.out.println(sumOfSquares.evaluate(values));
 //        System.out.println(StandardDeviation.evaluate(values));
         // 正态分布
-        NormalDistribution normalDistribution = new NormalDistribution(0, 1);
-        /**计算概率 P(X <= x*/
-        System.out.println(normalDistribution.cumulativeProbability(1.65));
-        /**计算分位数*/
-        System.out.println(normalDistribution.inverseCumulativeProbability(0.95));
+//        NormalDistribution normalDistribution = new NormalDistribution(0, 1);
+//        /**计算概率 P(X <= x)*/
+//        System.out.println(normalDistribution.cumulativeProbability(1.65));
+//        /**计算分位数*/
+//        System.out.println(normalDistribution.inverseCumulativeProbability(0.95));
+
     }
 }
