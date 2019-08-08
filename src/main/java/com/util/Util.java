@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by yhj on 2018/6/5.
- */
 public class Util {
     final static String lineSeparator = System.lineSeparator();
     /**
@@ -31,6 +28,16 @@ public class Util {
         return readFile(file);
     }
 
+    /**
+    * @Author: hqf
+    * @Date:  2019年8月8日13:47:51
+    * @Description: 指定读取 LineNum 行的内容
+    */
+    public static List<String> readFileAbsoluteByLine(String filePath, int LineNum){
+        File file = new File(filePath);
+        return readFileByLine(file, LineNum);
+    }
+
     public static List<String> readFile(File file){
         BufferedReader reader = null;
         List<String> list = new ArrayList<String>();
@@ -39,6 +46,31 @@ public class Util {
             String tmp = null;
             while ((tmp = reader.readLine()) != null){
                 list.add(tmp);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if(reader != null){
+                    reader.close();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            return list;
+        }
+    }
+
+    public static List<String> readFileByLine(File file, int lineNum){
+        BufferedReader reader = null;
+        List<String> list = new ArrayList<String>();
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String tmp = null;
+            int count = 0;
+            while ((tmp = reader.readLine()) != null && count<=lineNum){
+                list.add(tmp);
+                count++;
             }
         } catch (IOException e) {
             e.printStackTrace();

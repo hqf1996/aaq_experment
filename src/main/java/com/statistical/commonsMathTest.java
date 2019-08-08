@@ -10,7 +10,6 @@ import org.apache.commons.math3.stat.descriptive.summary.Product;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.apache.commons.math3.stat.descriptive.summary.SumOfSquares;
 
-import java.net.NoRouteToHostException;
 
 /**
  * @Author: hqf
@@ -22,23 +21,23 @@ public class commonsMathTest {
     public static void main(String[] args) {
         double[] values = new double[] { 0.33, 1.33, 0.27333, 0.3, 0.501,
                 0.444, 0.44, 0.34496, 0.33, 0.3, 0.292, 0.667 };
-        /*×îĞ¡Öµ*/
+        /*æœ€å°å€¼*/
         Min min = new Min();
-        /*×î´óÖµ*/
+        /*æœ€å¤§å€¼*/
         Max max = new Max();
-        /*Æ½¾ùÖµ*/
+        /*å¹³å‡å€¼*/
         Mean mean = new Mean();
-        /*³Ë»ı*/
+        /*ä¹˜ç§¯*/
         Product product = new Product();
-        /*ºÍ*/
+        /*å’Œ*/
         Sum sum = new Sum();
-        /*±ê×¼·½²î*/
+        /*æ ‡å‡†æ–¹å·®*/
         Variance variance1 = new Variance(false);
-        /*Ñù±¾·½²î*/
+        /*æ ·æœ¬æ–¹å·®*/
         Variance variance2 = new Variance();
-        /*Æ½·½ºÍ*/
+        /*å¹³æ–¹å’Œ*/
         SumOfSquares sumOfSquares = new SumOfSquares();
-        /*±ê×¼²î*/
+        /*æ ‡å‡†å·®*/
         StandardDeviation StandardDeviation =new StandardDeviation();
 //        System.out.println(max.evaluate(values));
 //        System.out.println(min.evaluate(values));
@@ -49,11 +48,11 @@ public class commonsMathTest {
         System.out.println(variance2.evaluate(values));
 //        System.out.println(sumOfSquares.evaluate(values));
 //        System.out.println(StandardDeviation.evaluate(values));
-        // ÕıÌ¬·Ö²¼
+        // æ­£æ€åˆ†å¸ƒ
 //        NormalDistribution normalDistribution = new NormalDistribution(0, 1);
-//        /**¼ÆËã¸ÅÂÊ P(X <= x)*/
+//        /**è®¡ç®—æ¦‚ç‡ P(X <= x)*/
 //        System.out.println(normalDistribution.cumulativeProbability(1.65));
-//        /**¼ÆËã·ÖÎ»Êı*/
+//        /**è®¡ç®—åˆ†ä½æ•°*/
 //        System.out.println(normalDistribution.inverseCumulativeProbability(0.95));
 
     }
