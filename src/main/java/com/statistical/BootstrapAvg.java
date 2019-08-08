@@ -25,7 +25,7 @@ public class BootstrapAvg {
             lineitemBean item = new lineitemBean(split);
             datelist.add(item);
         }
-        double p = 0.9;    //置信度
+        double p = 0.9;    //置信度 
         int N = datelist.size();    //原始数据样本容量
         int B = 100;       //bootstrap样本的数量，在bootstrap估计中一般B要大于等于1000
         /*存放抽样得到的数据*/
