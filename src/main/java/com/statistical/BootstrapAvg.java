@@ -2,9 +2,6 @@ package com.statistical;
 
 import com.bean.lineitemBean;
 import com.util.Util;
-import org.apache.commons.math3.random.JDKRandomGenerator;
-import org.apache.commons.math3.random.RandomGenerator;
-import org.apache.commons.math3.random.UniformRandomGenerator;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 
 import java.util.*;
@@ -25,11 +22,13 @@ public class BootstrapAvg {
             lineitemBean item = new lineitemBean(split);
             datelist.add(item);
         }
-        double p = 0.9;    //置信度 
+        double p = 0.95;    //置信度
         int N = datelist.size();    //原始数据样本容量
-        int B = 100;       //bootstrap样本的数量，在bootstrap估计中一般B要大于等于1000
+        int B = 1000;       //bootstrap样本的数量，在bootstrap估计中一般B要大于等于1000
         /*存放抽样得到的数据*/
-        List<double[]> Samples = new ArrayList<>();
+//        List<double[]> Samples = new ArrayList<>();
+        /*存放bootstrap样本均值的数据*/
+        List<Double> avgBootstrap = new ArrayList<>();
         // 开始抽样
         Random random = new Random();
         for (int i = 0 ; i < B ; ++i){
@@ -38,22 +37,18 @@ public class BootstrapAvg {
                 double linenumber = datelist.get(random.nextInt(N)).getLinenumber();
                 numList[j] = linenumber;
             }
-            Samples.add(numList);
+            // 对每个bootstrap样本算出每个的均值
+            Mean mean = new Mean();
+            avgBootstrap.add(mean.evaluate(numList));
             System.out.println("完成第" + (i+1) + "个bootstrap样本抽取");
-        }
-        // 对每个bootstrap样本算出每个的均值
-        Mean mean = new Mean();
-        List<Double> avgBootstrap = new ArrayList<>();
-        for (double[] each : Samples){
-            avgBootstrap.add(mean.evaluate(each));
         }
         // 并从小到大排序
         Collections.sort(avgBootstrap);
         int k1 = (int) (B * (1-p)/2);
         int k2 = (int) (B * (1-(1-p)/2));
-        System.out.println(k1);
-        System.out.println(k2);
-        System.out.println("置信区间为：" + "(" + avgBootstrap.get(k1+1) + ", " + avgBootstrap.get(k2+1)+")");
+//        System.out.println(k1);
+//        System.out.println(k2);
+        System.out.println("置信区间为：" + "(" + avgBootstrap.get(k1-1) + ", " + avgBootstrap.get(k2-1)+")");
     }
 
     public static void main(String[] args) {
