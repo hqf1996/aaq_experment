@@ -65,6 +65,8 @@ public class OnlineAggregationAvg {
         double Zp = normalDistribution.inverseCumulativeProbability((p + 1) / 2.0);//标准正态分布的分位点
         double T = variance.evaluate(S);//样本方差
         e = Math.sqrt(Zp*Zp*T/N);
+
+//        System.out.println(e);
         System.out.println("估计的AVG：" + avg);
         System.out.println("当前样本容量为：" + N);
         System.out.println("置信度：" + p*100 + "%");
@@ -77,9 +79,9 @@ public class OnlineAggregationAvg {
         OnlineAggregationAvg onlineAggregationAvg = new OnlineAggregationAvg();
         onlineAggregationAvg.CalcuAvgAll();
         System.out.println("------------------");
-        onlineAggregationAvg.CalcuAvgOA(800);
-//        for (int i = 1 ; i < 100 ; ++i){
-//            onlineAggregationAvg.CalcuAvgOA(i*10);
+        onlineAggregationAvg.CalcuAvgOA(10000);
+//        for (int i = 1 ; i < 101 ; ++i){
+//            onlineAggregationAvg.CalcuAvgOA(i*100);
 //        }
     }
 }
