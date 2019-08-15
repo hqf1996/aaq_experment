@@ -1,4 +1,4 @@
-package com.statistical;
+package com.BaseMath3Test;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
