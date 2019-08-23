@@ -68,7 +68,6 @@ public class CNARW extends Graph<NodeCNARW, Double>{
                     int minDeg = result[1];  //度的最小值
                     // 计算quv
                     double q = 1-1.0*C/minDeg;
-
                 }
             }
         }
