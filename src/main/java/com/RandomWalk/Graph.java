@@ -1,9 +1,6 @@
-package com.util;
+package com.RandomWalk;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author: hqf
@@ -21,6 +18,22 @@ public class Graph<T, K> {
     }
 
     public Graph() {
+    }
+
+    public VexNode<T>[] getVexNodes() {
+        return vexNodes;
+    }
+
+    public void setVexNodes(VexNode<T>[] vexNodes) {
+        this.vexNodes = vexNodes;
+    }
+
+    public boolean isDirected() {
+        return isDirected;
+    }
+
+    public void setDirected(boolean directed) {
+        isDirected = directed;
     }
 
     public Graph(boolean isDirected) {
@@ -43,6 +56,29 @@ public class Graph<T, K> {
             }
         }
     }
+
+    /***
+     * 选择某个节点的任意一个邻接点的序号
+     */
+    public int outNearNodesRandom(int start){
+        if (vexNodes[start].firstarc == null){
+            System.out.println("No near Nodes!");
+            return -1;
+        } else{
+            //存储所有的邻接点
+            List<ArcNode> arcNodes = new ArrayList<>();
+            ArcNode cur = vexNodes[start].firstarc;
+            while (cur != null){
+                arcNodes.add(cur);
+                cur = cur.next;
+            }
+            Random random = new Random();
+            //生成一个[0, arcNodes.size())的随机数
+            int i = random.nextInt(arcNodes.size());
+            return arcNodes.get(i).adjvex;
+        }
+    }
+
 
     /**
      * 头结点类
@@ -92,7 +128,7 @@ public class Graph<T, K> {
     /**
      * 邻接点类
      * */
-    class ArcNode<K>{
+    public class ArcNode<K>{
         int adjvex;     //节点在数组中的位置
         ArcNode next;     //下一个邻接点
         K edgeinfo;        //边的信息
@@ -140,8 +176,10 @@ public class Graph<T, K> {
      * @Description: 插入一个邻接点
      */
     private void insertArc(T[] edge, K predicate) {
-        int start = getIndex(edge[0]);
-        int end = getIndex(edge[1]);
+//        int start = getIndex(edge[0]);
+//        int end = getIndex(edge[1]);
+        int start = getNodeCNARWIndex(edge[0]);
+        int end = getNodeCNARWIndex(edge[1]);
 //        System.out.println(start);
 //        System.out.println(end);
         if (start == -1 || end == -1){
@@ -190,6 +228,25 @@ public class Graph<T, K> {
         return -1;
     }
 
+    /**
+     * 两个点是否相同，得到一个节点在vexNodes中的位置
+     * @param t
+     * @return
+     */
+    private int getNodeCNARWIndex(T t){
+        for (int i = 0 ; i < vexNodes.length ; ++i){
+            NodeCNARW t1 = (NodeCNARW) t;
+            NodeCNARW data = (NodeCNARW) vexNodes[i].data;
+            if (t1.getNode_name().equals(data.getNode_name())){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * */
+
     public Iterator<ArcNode> iterator(int start){
         return vexNodes[start].iterator();
     }
@@ -226,28 +283,35 @@ public class Graph<T, K> {
     }
 
     public static void main(String[] args) {
-        Graph<String, Double> graph = new Graph<>(false);
-        String []nodes = {"u" ,"a", "b", "c", "d", "v", "e", "f", "g", "h"};
-        double []nodes_values = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
-        String[][] edges = {{"u", "a"},
-                            {"u", "b"},
-                            {"u", "c"},
-                            {"u", "d"},
-                            {"u", "v"},
-                            {"a", "b"},
-                            {"b", "d"},
-                            {"b", "e"},
-                            {"d", "c"},
-                            {"c", "f"},
-                            {"c", "h"},
-                            {"v", "g"},
-                            {"v", "e"},
-                            {"v", "f"},
-                            {"e", "g"},
-                            {"g", "h"}};
+        Graph<NodeCNARW, Double> graph = new Graph<>(false);
+        String []nodes_names = {"u" ,"a", "b", "c", "d", "v", "e", "f", "g", "h"};
+        double []nodes_values = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        NodeCNARW []nodes = new NodeCNARW[10];
+        for (int i = 0 ; i < nodes_names.length ; ++i){
+            nodes[i] = new NodeCNARW(nodes_names[i], nodes_values[i]);
+        }
+
+        NodeCNARW [][]edges = {{new NodeCNARW("u", 1), new NodeCNARW("a", 0)},
+                            {new NodeCNARW("u", 1), new NodeCNARW("b", 0)},
+                            {new NodeCNARW("u", 1), new NodeCNARW("c", 0)},
+                            {new NodeCNARW("u", 1), new NodeCNARW("d", 0)},
+                            {new NodeCNARW("u", 1), new NodeCNARW("v", 0)},
+                            {new NodeCNARW("a", 0), new NodeCNARW("b", 0)},
+                            {new NodeCNARW("b", 0), new NodeCNARW("d", 0)},
+                            {new NodeCNARW("b", 0), new NodeCNARW("e", 0)},
+                            {new NodeCNARW("d", 0), new NodeCNARW("c", 0)},
+                            {new NodeCNARW("c", 0), new NodeCNARW("f", 0)},
+                            {new NodeCNARW("c", 0), new NodeCNARW("h", 0)},
+                            {new NodeCNARW("v", 0), new NodeCNARW("g", 0)},
+                            {new NodeCNARW("v", 0), new NodeCNARW("e", 0)},
+                            {new NodeCNARW("v", 0), new NodeCNARW("f", 0)},
+                            {new NodeCNARW("e", 0), new NodeCNARW("g", 0)},
+                            {new NodeCNARW("g", 0), new NodeCNARW("h", 0)}};
         Double[] predicates = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         graph.createGraph(nodes, edges, predicates);
         graph.outNearNodes(0);
+//        graph.outNearNodesRandom(0);
+
 //        graph.BFS(5);
 //        Iterator<Graph.ArcNode> iterator = graph.iterator(5);
 //        while (iterator.hasNext()){
