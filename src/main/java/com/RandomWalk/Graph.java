@@ -252,6 +252,10 @@ public class Graph<T, K> {
     }
 
 
+    public VexNode<T> GetDataByIndex(int index){
+        return vexNodes[index];
+    }
+
     /**
     * @Author: hqf
     * @Date:
@@ -309,7 +313,8 @@ public class Graph<T, K> {
                             {new NodeCNARW("g", 0), new NodeCNARW("h", 0)}};
         Double[] predicates = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         graph.createGraph(nodes, edges, predicates);
-        graph.outNearNodes(0);
+
+//        graph.outNearNodes(0);
 //        graph.outNearNodesRandom(0);
 
 //        graph.BFS(5);
