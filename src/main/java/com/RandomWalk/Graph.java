@@ -41,8 +41,8 @@ public class Graph<T, K> {
     }
 
     /**
-    * 迭代输出邻接表的一个节点的所有相邻节点
-    */
+     * 迭代输出邻接表的一个节点的所有相邻节点
+     */
     public void outNearNodes(int start){
         if (vexNodes[start].firstarc == null){
             System.out.println("No near Nodes!");
@@ -256,11 +256,12 @@ public class Graph<T, K> {
         return vexNodes[index];
     }
 
+
     /**
-    * @Author: hqf
-    * @Date:
-    * @Description: 广度优先遍历
-    */
+     * @Author: hqf
+     * @Date:
+     * @Description: 广度优先遍历
+     */
     public void BFS(int start){
         Set<Integer> hasVisited = new HashSet<>();     // 已经遍历过的点
         Set<Integer> currentVisited = new HashSet<>();     // 正在遍历队列中  还没有进行遍历的点
@@ -296,26 +297,26 @@ public class Graph<T, K> {
         }
 
         NodeCNARW [][]edges = {{new NodeCNARW("u", 1), new NodeCNARW("a", 0)},
-                            {new NodeCNARW("u", 1), new NodeCNARW("b", 0)},
-                            {new NodeCNARW("u", 1), new NodeCNARW("c", 0)},
-                            {new NodeCNARW("u", 1), new NodeCNARW("d", 0)},
-                            {new NodeCNARW("u", 1), new NodeCNARW("v", 0)},
-                            {new NodeCNARW("a", 0), new NodeCNARW("b", 0)},
-                            {new NodeCNARW("b", 0), new NodeCNARW("d", 0)},
-                            {new NodeCNARW("b", 0), new NodeCNARW("e", 0)},
-                            {new NodeCNARW("d", 0), new NodeCNARW("c", 0)},
-                            {new NodeCNARW("c", 0), new NodeCNARW("f", 0)},
-                            {new NodeCNARW("c", 0), new NodeCNARW("h", 0)},
-                            {new NodeCNARW("v", 0), new NodeCNARW("g", 0)},
-                            {new NodeCNARW("v", 0), new NodeCNARW("e", 0)},
-                            {new NodeCNARW("v", 0), new NodeCNARW("f", 0)},
-                            {new NodeCNARW("e", 0), new NodeCNARW("g", 0)},
-                            {new NodeCNARW("g", 0), new NodeCNARW("h", 0)}};
+                {new NodeCNARW("u", 1), new NodeCNARW("b", 0)},
+                {new NodeCNARW("u", 1), new NodeCNARW("c", 0)},
+                {new NodeCNARW("u", 1), new NodeCNARW("d", 0)},
+                {new NodeCNARW("u", 1), new NodeCNARW("v", 0)},
+                {new NodeCNARW("a", 0), new NodeCNARW("b", 0)},
+                {new NodeCNARW("b", 0), new NodeCNARW("d", 0)},
+                {new NodeCNARW("b", 0), new NodeCNARW("e", 0)},
+                {new NodeCNARW("d", 0), new NodeCNARW("c", 0)},
+                {new NodeCNARW("c", 0), new NodeCNARW("f", 0)},
+                {new NodeCNARW("c", 0), new NodeCNARW("h", 0)},
+                {new NodeCNARW("v", 0), new NodeCNARW("g", 0)},
+                {new NodeCNARW("v", 0), new NodeCNARW("e", 0)},
+                {new NodeCNARW("v", 0), new NodeCNARW("f", 0)},
+                {new NodeCNARW("e", 0), new NodeCNARW("g", 0)},
+                {new NodeCNARW("g", 0), new NodeCNARW("h", 0)}};
         Double[] predicates = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         graph.createGraph(nodes, edges, predicates);
 
 //        graph.outNearNodes(0);
-//        graph.outNearNodesRandom(0);
+        graph.outNearNodesRandom(0);
 
 //        graph.BFS(5);
 //        Iterator<Graph.ArcNode> iterator = graph.iterator(5);
