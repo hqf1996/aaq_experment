@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/BaseMath3Test/commonsMathTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/RandomWalk/Graph.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/statistical/BootstrapAvg.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/statistical/OnlineAggregationAvg.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/statistical/commonsMathTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/util/Util.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources/assembly.xml" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />

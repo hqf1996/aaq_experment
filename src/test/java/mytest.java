@@ -8,8 +8,5 @@ import java.util.Date;
  */
 public class mytest {
     public static void main(String[] args) {
-        String date = "1996|03|13";
-        String[] split = date.split("\\|");
-        System.out.println(split[1]);
     }
 }
