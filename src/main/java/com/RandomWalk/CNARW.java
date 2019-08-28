@@ -144,6 +144,34 @@ public class CNARW extends Graph<NodeCNARW, Double>{
     }
 
     /**
+     * 在进行样本的估计时，返回点的权重
+     * @param start
+     * @return
+     */
+    private double getWeight(int start) {
+        Iterator<Graph.ArcNode> iterator = graph.iterator(start);
+        List<Integer> nextAdjvex = new ArrayList<>();
+        // 获取当前节点的所有邻接点的adjvex
+        while (iterator.hasNext()) {
+            ArcNode arcNode = iterator.next();
+            int adjvex = arcNode.adjvex;
+            nextAdjvex.add(adjvex);
+        }
+        //计算当前节点所有边的q值和，可以重用，就不用重复计算
+        double q_sum = 0.0;
+        for (Integer each : nextAdjvex) {
+            int[] result = getPublicNodeNumAndDeg(start, each);
+            int C = result[0];  //公共点数
+            int minDeg = result[1];  //度的最小值
+            q_sum += (1 - 1.0 * C / minDeg);
+        }
+        // 计算r(u)
+        double r_u = 1.0 / (1.0 / getDegree(start)) * (q_sum);
+        double w_u = r_u/getDegree(start);
+        return w_u;
+    }
+
+    /**
      * 获得节点的度
      * @param adjvex
      * @return
@@ -203,13 +231,20 @@ public class CNARW extends Graph<NodeCNARW, Double>{
 
     /**
      * 随机游走过程
-     * @param start
+     * @param start 起始点位置
+     * @param k 达到稳态后的采样个数
      */
-    private void RandomWalk(int start){
+    private void RandomWalk(int start, int k){
+        boolean isBanance = false;   //是否达到稳态状态
         int currentNodeIndex;
         currentNodeIndex = start;
+        List<Double> vectorBefore;    //前一状态的向量
+        List<Double> vectorAfter;     //后一状态的向量
+        Set<Integer> NodeCollect = new HashSet<>();  //采样得到的点的序号
         int i = 0;
         while (i < 1000){
+            vectorBefore = getVector();
+            System.out.println(vectorBefore.toString());
             System.out.println("走了" + (i+1) + "条路");
             //随机选择下一跳节点，用拒绝的方式
             int nextNodeIndex = nextNode(currentNodeIndex);
@@ -218,12 +253,36 @@ public class CNARW extends Graph<NodeCNARW, Double>{
             VexNode<NodeCNARW> nextNode = graph.GetDataByIndex(nextNodeIndex);
             String path = currentNode.data.getNode_name()+"->"+nextNode.data.getNode_name();
             AllPath.add(path);
-//            System.out.println(path);
+            System.out.println(path);
             nextNode.data.setNode_values(getSumToNode(nextNodeIndex));
-            getVector();
+            vectorAfter = getVector();
             currentNodeIndex = nextNodeIndex;
             i++;
+            // 判断是否达到稳态，若达到稳态，则开始采样。达到想要采样的个数后停止随机游走
+            if (IsBanance(vectorBefore, vectorAfter)){
+                isBanance = true;
+            }
+            if (isBanance){
+                System.out.println("稳态 " + path);
+                if (NodeCollect.size() < k){
+                    System.out.println("加入点" + currentNodeIndex);
+                    NodeCollect.add(currentNodeIndex);
+                }else {
+                    break;
+                }
+            }
         }
+        // 开始得到估计值
+        double sumf = 0.0;
+        double sum = 0.0;
+        for (Integer each : NodeCollect){
+            double weight = getWeight(each);
+            int f = getDegree(each);      //这边的f指的是度
+            sumf+=(weight * f);
+            sum+=weight;
+        }
+        System.out.println("估计值为：" + sumf/sum);
+
     }
 
     /**
@@ -243,6 +302,10 @@ public class CNARW extends Graph<NodeCNARW, Double>{
         return sum;
     }
 
+    /**
+     * 得到当前向量
+     * @return
+     */
     private List<Double> getVector(){
         List<Double> vectorList = new ArrayList<>();
         //得到概率向量
@@ -250,12 +313,12 @@ public class CNARW extends Graph<NodeCNARW, Double>{
         for (int i = 0 ; i < vexNodesList.length ; ++i){
             vectorList.add(vexNodesList[i].data.node_values);
         }
-        System.out.println(vectorList.toString());
+//        System.out.println(vectorList.toString());
         return vectorList;
     }
 
     /**
-     * 随机选择下一跳节点
+     * 随机选择下一跳节点 （拒绝还是接受）
      * @param currentNode
      * @return
      */
@@ -274,7 +337,25 @@ public class CNARW extends Graph<NodeCNARW, Double>{
         return nodeIndex;
     }
 
+    /**
+     * 判断当前向量是否达到稳态
+     * @param vectorBefore
+     * @param vectorAfter
+     * @return
+     */
+    private boolean IsBanance(List<Double> vectorBefore, List<Double> vectorAfter){
+        for (int i = 0 ; i < vectorBefore.size() ; ++i){
+            if (Math.abs(vectorAfter.get(i)-vectorBefore.get(i))>0.00001){
+                return false;
+            }
+        }
+        return true;
+    }
 
+    /**
+     * 路径的统计
+     * @param times
+     */
     public void PathStatistics(int times){
         List<String> listBefore = new ArrayList<>();
         List<String> listAfter = new ArrayList<>();
@@ -308,6 +389,18 @@ public class CNARW extends Graph<NodeCNARW, Double>{
         }
     }
 
+    /**
+     * 得到图中真实的值，与估计值对比。这边函数取的是计算节点的平均度
+     * @return
+     */
+    public double getTrueValue(){
+        double sum = 0.0;
+        for (int i = 0 ; i < graph.getVexNodes().length ; ++i){
+            sum+=getDegree(i);
+        }
+        return sum/graph.getVexNodes().length;
+    }
+
     public static void main(String[] args) {
         CNARW cn = new CNARW();
         cn.initGraph();
@@ -321,9 +414,11 @@ public class CNARW extends Graph<NodeCNARW, Double>{
 //            System.out.println(doubleList.toString());
 //        }
 //        System.out.println(cn.nextNode(0));
-        cn.RandomWalk(0);
-        Scanner in = new Scanner(System.in);
-        int times = in.nextInt();
-        cn.PathStatistics(times);
+        // 从第几个点开始随机游走，在达到稳态之后取几个样本点
+        cn.RandomWalk(0, 6);
+//        Scanner in = new Scanner(System.in);
+//        int times = in.nextInt();
+//        cn.PathStatistics(times);
+        System.out.println("度的真实值为：" + cn.getTrueValue());
     }
 }
