@@ -20,31 +20,77 @@ public class CNARW extends Graph<NodeCNARW, Double>{
      */
     private void initGraph(){
         Graph<NodeCNARW, Double> graph = new Graph<>(false);
-        String []nodes_names = {"u" ,"a", "b", "c", "d", "v", "e", "f", "g", "h"};
-        double []nodes_values = {0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1};
-        NodeCNARW []nodes = new NodeCNARW[10];
+        String []nodes_names = {"u" ,"a", "b", "c", "d", "v", "e", "f", "g", "h", "add1", "add2", "add3", "add4", "add5", "add6",
+                "add7", "add8", "add9", "add10", "add11", "add12", "add13", "add14", "add15"};
+        double []nodes_values = {1.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        NodeCNARW []nodes = new NodeCNARW[25];
         for (int i = 0 ; i < nodes_names.length ; ++i){
             nodes[i] = new NodeCNARW(nodes_names[i], nodes_values[i]);
         }
-
-        NodeCNARW [][]edges = {{new NodeCNARW("u", 0.1), new NodeCNARW("a", 0.1)},
-                {new NodeCNARW("u", 0.1), new NodeCNARW("b", 0.1)},
-                {new NodeCNARW("u", 0.1), new NodeCNARW("c", 0.1)},
-                {new NodeCNARW("u", 0.1), new NodeCNARW("d", 0.1)},
-                {new NodeCNARW("u", 0.1), new NodeCNARW("v", 0.1)},
-                {new NodeCNARW("a", 0.1), new NodeCNARW("b", 0.1)},
-                {new NodeCNARW("b", 0.1), new NodeCNARW("d", 0.1)},
-                {new NodeCNARW("b", 0.1), new NodeCNARW("e", 0.1)},
-                {new NodeCNARW("d", 0.1), new NodeCNARW("c", 0.1)},
-                {new NodeCNARW("c", 0.1), new NodeCNARW("f", 0.1)},
-                {new NodeCNARW("c", 0.1), new NodeCNARW("h", 0.1)},
-                {new NodeCNARW("v", 0.1), new NodeCNARW("g", 0.1)},
-                {new NodeCNARW("v", 0.1), new NodeCNARW("e", 0.1)},
-                {new NodeCNARW("v", 0.1), new NodeCNARW("f", 0.1)},
-                {new NodeCNARW("e", 0.1), new NodeCNARW("g", 0.1)},
-                {new NodeCNARW("g", 0.1), new NodeCNARW("h", 0.1)}};
-        Double[] predicates = {0.16216216216216217, 0.16216216216216217, 0.24324324324324323, 0.10810810810810813, 0.32432432432432434,
-                0.5, 0.25, 0.37499999999999994, 0.4, 0.2926829268292683, 0.2926829268292683, 0.2, 0.2, 0.3, 0.28571428571428575, 0.42857142857142855};
+        NodeCNARW [][]edges = {
+                {new NodeCNARW("u", 1.0), new NodeCNARW("a", 0)},
+                {new NodeCNARW("u", 1.0), new NodeCNARW("b", 0)},
+                {new NodeCNARW("u", 1.0), new NodeCNARW("c", 0)},
+                {new NodeCNARW("u", 1.0), new NodeCNARW("d", 0)},
+                {new NodeCNARW("u", 1.0), new NodeCNARW("v", 0)},
+                {new NodeCNARW("a", 0), new NodeCNARW("b", 0)},
+                {new NodeCNARW("b", 0), new NodeCNARW("d", 0)},
+                {new NodeCNARW("b", 0), new NodeCNARW("e", 0)},
+                {new NodeCNARW("d", 0), new NodeCNARW("c", 0)},
+                {new NodeCNARW("c", 0), new NodeCNARW("f", 0)},
+                {new NodeCNARW("c", 0), new NodeCNARW("h", 0)},
+                {new NodeCNARW("v", 0), new NodeCNARW("g", 0)},
+                {new NodeCNARW("v", 0), new NodeCNARW("e", 0)},
+                {new NodeCNARW("v", 0), new NodeCNARW("f", 0)},
+                {new NodeCNARW("e", 0), new NodeCNARW("g", 0)},
+                {new NodeCNARW("g", 0), new NodeCNARW("h", 0)},
+                {new NodeCNARW("add1", 0), new NodeCNARW("a", 0)},
+                {new NodeCNARW("add1", 0), new NodeCNARW("g", 0)},
+                {new NodeCNARW("add1", 0), new NodeCNARW("add2", 0)},
+                {new NodeCNARW("add2", 0), new NodeCNARW("v", 0)},
+                {new NodeCNARW("d", 0), new NodeCNARW("add3", 0)},
+                {new NodeCNARW("add3", 0), new NodeCNARW("h", 0)},
+                {new NodeCNARW("g", 0), new NodeCNARW("add4", 0)},
+                {new NodeCNARW("add4", 0), new NodeCNARW("add5", 0)},
+                {new NodeCNARW("g", 0), new NodeCNARW("add6", 0)},
+                {new NodeCNARW("add5", 0), new NodeCNARW("add6", 0)},
+                {new NodeCNARW("h", 0), new NodeCNARW("add6", 0)},
+                {new NodeCNARW("add6", 0), new NodeCNARW("add7", 0)},
+                {new NodeCNARW("add7", 0), new NodeCNARW("add8", 0)},
+                {new NodeCNARW("add6", 0), new NodeCNARW("add9", 0)},
+                {new NodeCNARW("h", 0), new NodeCNARW("add7", 0)},
+                {new NodeCNARW("add4", 0), new NodeCNARW("add9", 0)},
+                {new NodeCNARW("add8", 0), new NodeCNARW("add9", 0)},
+                {new NodeCNARW("h", 0), new NodeCNARW("add10", 0)},
+                {new NodeCNARW("add3", 0), new NodeCNARW("add10", 0)},
+                {new NodeCNARW("add10", 0), new NodeCNARW("add7", 0)},
+                {new NodeCNARW("add10", 0), new NodeCNARW("add11", 0)},
+                {new NodeCNARW("add11", 0), new NodeCNARW("add7", 0)},
+                {new NodeCNARW("add11", 0), new NodeCNARW("add12", 0)},
+                {new NodeCNARW("add12", 0), new NodeCNARW("add9", 0)},
+                {new NodeCNARW("add10", 0), new NodeCNARW("add13", 0)},
+                {new NodeCNARW("add13", 0), new NodeCNARW("add14", 0)},
+                {new NodeCNARW("add5", 0), new NodeCNARW("add15", 0)},
+                {new NodeCNARW("add15", 0), new NodeCNARW("add9", 0)},
+                };
+        Double[] predicates = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+//        NodeCNARW [][]edges = {{new NodeCNARW("u", 0.1), new NodeCNARW("a", 0.1)},
+//                {new NodeCNARW("u", 0.1), new NodeCNARW("b", 0.1)},
+//                {new NodeCNARW("u", 0.1), new NodeCNARW("c", 0.1)},
+//                {new NodeCNARW("u", 0.1), new NodeCNARW("d", 0.1)},
+//                {new NodeCNARW("u", 0.1), new NodeCNARW("v", 0.1)},
+//                {new NodeCNARW("a", 0.1), new NodeCNARW("b", 0.1)},
+//                {new NodeCNARW("b", 0.1), new NodeCNARW("d", 0.1)},
+//                {new NodeCNARW("b", 0.1), new NodeCNARW("e", 0.1)},
+//                {new NodeCNARW("d", 0.1), new NodeCNARW("c", 0.1)},
+//                {new NodeCNARW("c", 0.1), new NodeCNARW("f", 0.1)},
+//                {new NodeCNARW("c", 0.1), new NodeCNARW("h", 0.1)},
+//                {new NodeCNARW("v", 0.1), new NodeCNARW("g", 0.1)},
+//                {new NodeCNARW("v", 0.1), new NodeCNARW("e", 0.1)},
+//                {new NodeCNARW("v", 0.1), new NodeCNARW("f", 0.1)},
+//                {new NodeCNARW("e", 0.1), new NodeCNARW("g", 0.1)},
+//                {new NodeCNARW("g", 0.1), new NodeCNARW("h", 0.1)}};
         graph.createGraph(nodes, edges, predicates);
         this.graph = graph;
     }
@@ -396,6 +442,7 @@ public class CNARW extends Graph<NodeCNARW, Double>{
     public double getTrueValue(){
         double sum = 0.0;
         for (int i = 0 ; i < graph.getVexNodes().length ; ++i){
+//            System.out.println(getDegree(i));
             sum+=getDegree(i);
         }
         return sum/graph.getVexNodes().length;
@@ -415,7 +462,7 @@ public class CNARW extends Graph<NodeCNARW, Double>{
 //        }
 //        System.out.println(cn.nextNode(0));
         // 从第几个点开始随机游走，在达到稳态之后取几个样本点
-        cn.RandomWalk(0, 6);
+        cn.RandomWalk(0, 15);
 //        Scanner in = new Scanner(System.in);
 //        int times = in.nextInt();
 //        cn.PathStatistics(times);
