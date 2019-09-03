@@ -18,7 +18,7 @@ import java.util.List;
  *                的个数，思路和统计sum的基本一致，需要修改的地方是只要将满足情况的点v(i)看成是1，不满足情况的则为0
  */
 public class OnlineAggregationCount {
-    public void CalcuCountAll(){
+    public double CalcuCountAll(){
         long startTime = System.currentTimeMillis();
         List<lineitemBean> datelist = new ArrayList<>();
         List<String> list = Util.readFileAbsolute("F:\\javaproject\\aaq_experment\\result\\lineitem.tbl");
@@ -37,12 +37,14 @@ public class OnlineAggregationCount {
         System.out.println("真实COUNT：" + count);
         long endTime = System.currentTimeMillis();
         System.out.println("耗时：" + String.valueOf(endTime-startTime ) + "ms");
+        return count;
     }
 
     public void CalcuCountOA(int n) {
         double p = 0.95;     //置信度
         int N = n;         //样本容量
         double[] S = new double[N];//样本集
+        double[] S_plus = new double[N];//样本集plus
         double e;                  //置信区间
         int sumN = 600000;         //总体样本量
         long startTime2 = System.currentTimeMillis();
@@ -58,6 +60,7 @@ public class OnlineAggregationCount {
             int linenumber = datelist.get(i).getLinenumber();
             if (linenumber >= 3) {
                 S[i] = 1;
+                S_plus[i] = 1 * sumN;
             } else {
                 S[i] = 0;
             }
@@ -72,8 +75,8 @@ public class OnlineAggregationCount {
         Variance variance = new Variance();
         double avg = mean.evaluate(S); //样本均值
         double Zp = normalDistribution.inverseCumulativeProbability((p + 1) / 2.0);//标准正态分布的分位点
-        double T = variance.evaluate(S);//样本方差
-        e = Math.sqrt(Zp * Zp * T / (N * avg * avg));
+        double T = variance.evaluate(S_plus);//样本方差
+        e = Math.sqrt(Zp * Zp * T / (N));
 
 //        System.out.println(e);
         System.out.println("Sum的估计值为：" + SumEvaluate);
@@ -82,11 +85,13 @@ public class OnlineAggregationCount {
         System.out.println("置信区间：" + "[" + SumEvaluate + "-" + e + ", " + SumEvaluate + "+" + e + "]");
         long endTime2 = System.currentTimeMillis();
         System.out.println("耗时：" + String.valueOf(endTime2 - startTime2) + "ms");
+        double count = this.CalcuCountAll();
+        System.out.println("误差率：" + e/count);
     }
 
     public static void main(String[] args) {
         OnlineAggregationCount onlineAggregationCount = new OnlineAggregationCount();
         onlineAggregationCount.CalcuCountAll();
-        onlineAggregationCount.CalcuCountOA(1000);
+        onlineAggregationCount.CalcuCountOA(10000);
     }
 }
