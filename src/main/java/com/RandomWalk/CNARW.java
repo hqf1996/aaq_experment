@@ -52,7 +52,6 @@ public class CNARW extends Graph<NodeCNARW, Double>{
                 {new NodeCNARW("add3", 0), new NodeCNARW("h", 0)},
                 {new NodeCNARW("g", 0), new NodeCNARW("add4", 0)},
                 {new NodeCNARW("add4", 0), new NodeCNARW("add5", 0)},
-                {new NodeCNARW("g", 0), new NodeCNARW("add6", 0)},
                 {new NodeCNARW("add5", 0), new NodeCNARW("add6", 0)},
                 {new NodeCNARW("h", 0), new NodeCNARW("add6", 0)},
                 {new NodeCNARW("add6", 0), new NodeCNARW("add7", 0)},
@@ -72,9 +71,11 @@ public class CNARW extends Graph<NodeCNARW, Double>{
                 {new NodeCNARW("add13", 0), new NodeCNARW("add14", 0)},
                 {new NodeCNARW("add5", 0), new NodeCNARW("add15", 0)},
                 {new NodeCNARW("add15", 0), new NodeCNARW("add9", 0)},
+                {new NodeCNARW("add14", 0), new NodeCNARW("add12", 0)},
+                {new NodeCNARW("add14", 0), new NodeCNARW("add8", 0)}
                 };
         Double[] predicates = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+                0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0};
 //        NodeCNARW [][]edges = {{new NodeCNARW("u", 0.1), new NodeCNARW("a", 0.1)},
 //                {new NodeCNARW("u", 0.1), new NodeCNARW("b", 0.1)},
 //                {new NodeCNARW("u", 0.1), new NodeCNARW("c", 0.1)},
@@ -288,10 +289,12 @@ public class CNARW extends Graph<NodeCNARW, Double>{
         List<Double> vectorAfter;     //后一状态的向量
         Set<Integer> NodeCollect = new HashSet<>();  //采样得到的点的序号
         int i = 0;
+        long starttime = System.currentTimeMillis();
         while (i < 1000){
             vectorBefore = getVector();
             System.out.println(vectorBefore.toString());
             System.out.println("走了" + (i+1) + "条路");
+            System.out.println(System.currentTimeMillis()-starttime + "ms");
             //随机选择下一跳节点，用拒绝的方式
             int nextNodeIndex = nextNode(currentNodeIndex);
             //更新下一跳节点的向量概率
