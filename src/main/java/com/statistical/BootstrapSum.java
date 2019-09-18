@@ -2,7 +2,6 @@ package com.statistical;
 
 import com.bean.lineitemBean;
 import com.util.Util;
-import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
 
 import java.util.ArrayList;

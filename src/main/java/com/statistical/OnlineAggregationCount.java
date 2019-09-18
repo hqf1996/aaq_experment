@@ -55,14 +55,17 @@ public class OnlineAggregationCount {
             lineitemBean item = new lineitemBean(split);
             datelist.add(item);
         }
+        int countS_plus = 0;
         /**用online aggregation估计Count*/
         for (int i = 0; i < N; ++i) {
             int linenumber = datelist.get(i).getLinenumber();
             if (linenumber >= 3) {
                 S[i] = 1;
                 S_plus[i] = 1 * sumN;
+                countS_plus++;
             } else {
                 S[i] = 0;
+                S_plus[i] = 0;
             }
 
         }
@@ -73,9 +76,19 @@ public class OnlineAggregationCount {
         Mean mean = new Mean();
         NormalDistribution normalDistribution = new NormalDistribution(0, 1);
         Variance variance = new Variance();
-        double avg = mean.evaluate(S); //样本均值
+        double avg = mean.evaluate(S_plus); //样本均值
         double Zp = normalDistribution.inverseCumulativeProbability((p + 1) / 2.0);//标准正态分布的分位点
+        System.out.println("Zp"+Zp);
+        System.out.println(1.0*countS_plus*sumN*sumN/N-avg*avg);
+        double SSS = 0.0;
+        for (int i = 0 ; i < S_plus.length ; ++i){
+            SSS+=(S_plus[i]-avg)*(S_plus[i]-avg);
+        }
+        System.out.println(SSS/(N-1));
+
         double T = variance.evaluate(S_plus);//样本方差
+//        double T = 1.0*countS_plus*sumN*sumN/N-avg*avg;
+        System.out.println(T);
         e = Math.sqrt(Zp * Zp * T / (N));
 
 //        System.out.println(e);
@@ -92,6 +105,6 @@ public class OnlineAggregationCount {
     public static void main(String[] args) {
         OnlineAggregationCount onlineAggregationCount = new OnlineAggregationCount();
         onlineAggregationCount.CalcuCountAll();
-        onlineAggregationCount.CalcuCountOA(10000);
+        onlineAggregationCount.CalcuCountOA(5000);
     }
 }

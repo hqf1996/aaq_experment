@@ -127,11 +127,13 @@ public class CNARW extends Graph<NodeCNARW, Double>{
     private double getP_uvValue(int start, int end) {
         Iterator<Graph.ArcNode> iterator = graph.iterator(start);
         List<Integer> nextAdjvex = new ArrayList<>();
+        int startDegree = 0;
         // 获取当前节点的所有临界点的adjvex
         while (iterator.hasNext()) {
             ArcNode arcNode = iterator.next();
             int adjvex = arcNode.adjvex;
             nextAdjvex.add(adjvex);
+            startDegree++;
         }
         VexNode<NodeCNARW> nodeCNARWVexNode1 = graph.GetDataByIndex(start);
         VexNode<NodeCNARW> nodeCNARWVexNode2 = graph.GetDataByIndex(end);
@@ -154,8 +156,8 @@ public class CNARW extends Graph<NodeCNARW, Double>{
         int C = result[0];  //公共点数
         int minDeg = result[1];  //度的最小值
         double q_uv = 1 - 1.0 * C / minDeg;
-        double p_uv_ba = 1.0 * q_uv / getDegree(start);
-        double p_uu_ba = 1 - (1.0 / getDegree(start)) * (q_sum);
+        double p_uv_ba = 1.0 * q_uv / startDegree;
+        double p_uu_ba = 1 - (1.0 / startDegree) * (q_sum);
         double P_uv = p_uv_ba / (1 - p_uu_ba);
 //        System.out.println(nodeCNARWVexNode1.data.node_name + "->" + nodeCNARWVexNode2.data.node_name + ":" + P_uv);
         return P_uv;
@@ -322,19 +324,19 @@ public class CNARW extends Graph<NodeCNARW, Double>{
             System.out.println(vectorAfter.toString());
             currentNodeIndex = nextNodeIndex;
             i++;
-//            // 判断是否达到稳态，若达到稳态，则开始采样。达到想要采样的个数后停止随机游走
-//            if (IsBanance(vectorBefore, vectorAfter)){
-//                isBanance = true;
-//            }
-//            if (isBanance){
-//                System.out.println("稳态 " + path);
-//                if (NodeCollect.size() < k){
-//                    System.out.println("加入点" + currentNodeIndex);
-//                    NodeCollect.add(currentNodeIndex);
-//                }else {
-//                    break;
-//                }
-//            }
+            // 判断是否达到稳态，若达到稳态，则开始采样。达到想要采样的个数后停止随机游走
+            if (IsBanance(vectorBefore, vectorAfter)){
+                isBanance = true;
+            }
+            if (isBanance){
+                System.out.println("稳态 " + path);
+                if (NodeCollect.size() < k){
+                    System.out.println("加入点" + currentNodeIndex);
+                    NodeCollect.add(currentNodeIndex);
+                }else {
+                    break;
+                }
+            }
         }
         // 开始得到估计值
         double sumf = 0.0;

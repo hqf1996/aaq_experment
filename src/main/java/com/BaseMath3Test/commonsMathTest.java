@@ -1,5 +1,6 @@
 package com.BaseMath3Test;
 
+import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
@@ -44,8 +45,8 @@ public class commonsMathTest {
 //        System.out.println(mean.evaluate(values));
 //        System.out.println(product.evaluate(values));
 //        System.out.println(sum.evaluate(values));
-        System.out.println(variance1.evaluate(values));
-        System.out.println(variance2.evaluate(values));
+//        System.out.println(variance1.evaluate(values));
+//        System.out.println(variance2.evaluate(values));
 //        System.out.println(sumOfSquares.evaluate(values));
 //        System.out.println(StandardDeviation.evaluate(values));
         // 正态分布
@@ -55,5 +56,20 @@ public class commonsMathTest {
 //        /**计算分位数*/
 //        System.out.println(normalDistribution.inverseCumulativeProbability(0.95));
 
+        // 二项分布
+//        BinomialDistribution binomialDistribution = new BinomialDistribution(50, 0.01);
+        for (int i = 0 ; i < 100 ; ++i){
+            System.out.println(getBinomial(50, 0.01));
+        }
+    }
+
+    // 生成一个符合二项分布的随机数
+    public static int getBinomial(int n, double p) {
+        int x = 0;
+        for(int i = 0; i < n; i++) {
+            if(Math.random() < p)
+                x++;
+        }
+        return x;
     }
 }
