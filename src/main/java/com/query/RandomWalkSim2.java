@@ -151,7 +151,7 @@ public class RandomWalkSim2 {
                                 edgesInfo.add(Arrays.asList(OffsetLine[i].split(";")));
                                 visitNodes.add(Integer.valueOf(OffsetLine[j]));
                             }
-                        }
+                        } 
                     }
 //                    System.out.println(i);
                     j+=2;
