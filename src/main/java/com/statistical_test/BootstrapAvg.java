@@ -1,4 +1,4 @@
-package com.statistical;
+package com.statistical_test;
 
 import com.bean.lineitemBean;
 import com.util.Util;

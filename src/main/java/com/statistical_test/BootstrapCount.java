@@ -1,4 +1,4 @@
-package com.statistical;
+package com.statistical_test;
 
 import com.bean.lineitemBean;
 import com.util.Util;
@@ -12,13 +12,13 @@ import java.util.Random;
 /**
  * @Author: hqf
  * @description:
- * @Data: Create in 19:03 2019/8/14
- * @Modified By: 对TPC产生的lineitem.tbl表的linenumber符合条件的总和进行bootstrap估计
+ * @Data: Create in 10:50 2019/8/15
+ * @Modified By: 对TPC产生的lineitem.tbl表的linenumber符合条件的总和进行bootstrap估计，linenumber需要大于等于3
  */
-public class BootstrapSum {
-    public void CalcuSumBootstrap(int b){
-        long timeConsume1 = 0;
-        long timeConsume2 = 0;
+public class BootstrapCount {
+    public void CalcuCountBootstrap(int b){
+        long timeConsume1 = 0;     //采样耗时
+        long timeConsume2 = 0;     //估计耗时
         long startTime = System.currentTimeMillis();
         // 读取文件数据并封装成对象
         List<lineitemBean> datelist = new ArrayList<>();
@@ -43,7 +43,11 @@ public class BootstrapSum {
             double[] numList = new double[N];
             for (int j = 0 ; j < N ; ++j){
                 double linenumber = datelist.get(random.nextInt(N)).getLinenumber();
-                numList[j] = linenumber;
+                if (linenumber >= 3){
+                    numList[j] = 1;
+                } else {
+                    numList[j] = 0;
+                }
             }
             timeConsume1+=System.currentTimeMillis()-startTime;
             startTime = System.currentTimeMillis();
@@ -67,7 +71,7 @@ public class BootstrapSum {
     }
 
     public static void main(String[] args) {
-        BootstrapSum bootstrapSum = new BootstrapSum();
-        bootstrapSum.CalcuSumBootstrap(100);
+        BootstrapCount bootstrapCount = new BootstrapCount();
+        bootstrapCount.CalcuCountBootstrap(100);
     }
 }
