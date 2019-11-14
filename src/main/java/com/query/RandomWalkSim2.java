@@ -21,7 +21,7 @@ public class RandomWalkSim2 {
 //    Map<Integer, Integer> OffsetMap;        // 偏移量索引
     Map<Integer, String> PartOfAdjTableMap;   // 先加载部分邻接表信息到内存中，提高查询速度  先加载1/4试试内存情况
     Map<String, Double> mapPredicate;         // 谓词对应的相似度表
-    double threshold = 0.1;                   // 谓词的阈值
+    double threshold = 0.0;                   // 谓词的阈值
     double thresholdPss = 0.85;               // pss值的阈值
     /**
      * 从全图的锚点出发，限定跳数的bfs获取子图
@@ -73,6 +73,22 @@ public class RandomWalkSim2 {
         }
         System.out.println("部分邻接表信息加载到内存完毕");
         System.out.println(System.currentTimeMillis()-startTime);
+//
+//        int countcount = 0;
+//        for (Map.Entry<Integer, String> each : PartOfAdjTableMap.entrySet()) {
+//            String[] split = each.getValue().split("\t");
+//            countcount+=split.length/2;
+//        }
+//        System.out.println(countcount);
+//        System.out.println(countcount/EntityMap.size());
+//
+        long totalTime0 = 0;
+        long totalTime0_1 = 0;
+        long totalTime1 = 0;
+        long totalTime2 = 0;
+        long totalTime3 = 0;
+        long totalTime4 = 0;
+        long totaltestTime = 0;
 
         long bfsStartTime = System.currentTimeMillis();
         Set<Entity> entities = new HashSet<>();     //bfs得到的点
@@ -125,69 +141,68 @@ public class RandomWalkSim2 {
 
                 /** 做法一：解析currentIndex的邻接点，谓词相似度，小于某个值就不计入子图中，
                  * 类型为车计入子图中但不计入下一层候选节点中**/
+//                int j = 2;  //指向邻接点id的位置
+//                for (int i = 1 ; i < OffsetLine.length-1 ; i=i+2) {  //i指向邻接点边的位置
+//                    // 如果在内存中找到这个邻接点，直接返回string。否则从磁盘中查找
+////                    String[] neborNodeAdj = findAdjLine(Integer.valueOf(OffsetLine[j]));
+//                    String edgeNext = OffsetLine[i];
+//                    double maxPredicate = getMaxPredicate(edgeNext);
+//                    if (maxPredicate < threshold) {
+//                        j+=2;
+//                        continue;
+//                    } else {
+//                        int nodeNext = Integer.valueOf(OffsetLine[j]);
+//                        if (layer < 3) {
+//                            Entity visitEntity = new Entity(nodeNext);
+//                            entities.add(visitEntity);
+//                            edges.add(new Entity[]{EntityCurrent, visitEntity});
+//                            edgesInfo.add(Arrays.asList(edgeNext.split(";")));
+//                            if (!visitNodes.contains(nodeNext) && !EntityTypeMap.get(nodeNext).equals("automobile")) {
+//                                nextNodes.add(nodeNext);
+//                            }
+//                            visitNodes.add(nodeNext);
+//                        } else if (layer == 3) {
+//                            if (EntityTypeMap.get(nodeNext).equals("automobile")) {
+//                                Entity visitEntity = new Entity(nodeNext);
+//                                entities.add(visitEntity);
+//                                edges.add(new Entity[]{EntityCurrent, visitEntity});
+//                                edgesInfo.add(Arrays.asList(edgeNext.split(";")));
+//                                visitNodes.add(nodeNext);
+//                            }
+//                        }
+//                    }
+////                    System.out.println(i);
+//                    j+=2;
+//                }
+
+                /** 做法一改：所有遍历到的点，类型为车的不管相似度如何，直接加进来。其余操作和做法一相同。**/
                 int j = 2;  //指向邻接点id的位置
                 for (int i = 1 ; i < OffsetLine.length-1 ; i=i+2) {  //i指向邻接点边的位置
-                    // 如果在内存中找到这个邻接点，直接返回string。否则从磁盘中查找
-//                    String[] neborNodeAdj = findAdjLine(Integer.valueOf(OffsetLine[j]));
-                    double maxPredicate = getMaxPredicate(OffsetLine[i]);
+                    long time1 = System.currentTimeMillis();
+                    String edgeNext = OffsetLine[i];
+                    double maxPredicate = getMaxPredicate(edgeNext);
+                    totalTime1+=(System.currentTimeMillis()-time1);
                     if (maxPredicate < threshold) {
                         j+=2;
                         continue;
                     } else {
-                        if (layer < 3) {
-                            Entity visitEntity = new Entity(Integer.valueOf(OffsetLine[j]));
-                            entities.add(visitEntity);
-                            edges.add(new Entity[]{EntityCurrent, visitEntity});
-                            edgesInfo.add(Arrays.asList(OffsetLine[i].split(";")));
-                            if (!visitNodes.contains(Integer.valueOf(OffsetLine[j])) && !EntityTypeMap.get(visitEntity.getId()).equals("automobile")) {
-                                nextNodes.add(Integer.valueOf(OffsetLine[j]));
-                            }
-                            visitNodes.add(Integer.valueOf(OffsetLine[j]));
-                        } else if (layer == 3) {
-                            Entity visitEntity = new Entity(Integer.valueOf(OffsetLine[j]));
-                            if (EntityTypeMap.get(visitEntity.getId()).equals("automobile")) {
-                                entities.add(visitEntity);
-                                edges.add(new Entity[]{EntityCurrent, visitEntity});
-                                edgesInfo.add(Arrays.asList(OffsetLine[i].split(";")));
-                                visitNodes.add(Integer.valueOf(OffsetLine[j]));
-                            }
-                        } 
+                        int nodeNext = Integer.valueOf(OffsetLine[j]);
+                        long time2 = System.currentTimeMillis();
+                        Entity visitEntity = new Entity(nodeNext);
+                        totalTime2+=(System.currentTimeMillis()-time2);
+//                        entities.add(visitEntity);
+//                        edges.add(new Entity[]{EntityCurrent, visitEntity});
+//                        edgesInfo.add(Arrays.asList(edgeNext.split(";")));
+                        // !visitEntity.getType().equals("automobile")
+                        if (!visitNodes.contains(nodeNext) && !EntityTypeMap.get(nodeNext).equals("automobile")) {
+                        long time3 = System.currentTimeMillis();
+                            nextNodes.add(nodeNext);
+                        totalTime3+=(System.currentTimeMillis()-time3);
+                        }
+                        visitNodes.add(nodeNext);
                     }
-//                    System.out.println(i);
                     j+=2;
                 }
-
-                /** 做法一改：所有遍历到的点，类型为车的不管相似度如何，直接加进来。其余操作和做法一相同。**/
-//                int j = 2;  //指向邻接点id的位置
-//                for (int i = 1 ; i < OffsetLine.length-1 ; i=i+2) {  //i指向邻接点边的位置
-//                    boolean isType = false;
-//                    if (EntityMap.get(Integer.valueOf(OffsetLine[j])).split("\t")[2].equals("automobile")) {
-//                        isType = true;
-//                    } else {
-//                        isType = false;
-//                        double maxPredicate = getMaxPredicate(OffsetLine[i]);
-//                        if (maxPredicate < threshold) {
-//                            j+=2;
-//                            continue;
-//                        }
-//                    }
-//                    //将该条邻接点记录更新到内存中
-////                        PartOfAdjTableMap.put(Integer.valueOf(OffsetLine[j]), StringUtils.join(neborNodeAdj, "\t"));
-//                    Entity visitEntity = getEntityFromId(Integer.valueOf(OffsetLine[j]));
-//                    entities.add(visitEntity);
-//                    edges.add(new Entity[]{EntityCurrent, visitEntity});
-////                        System.out.println(visitEntity.toString());
-//                    edgesInfo.add(Arrays.asList(OffsetLine[i].split(";")));
-//
-//                    // 不是车，并且没有被遍历过
-//                    if (!visitNodes.contains(OffsetLine[j]) && !isType) {
-//                        nextNodes.add(Integer.valueOf(OffsetLine[j]));
-//                    }
-//                    visitNodes.add(Integer.valueOf(OffsetLine[j]));
-//
-////                    System.out.println(i);
-//                    j+=2;
-//                }
 
 
                 /** 做法二：考虑用A*的类似思想，如果类型不是车的话就不往后看一跳，否则往后看一跳，
@@ -285,6 +300,13 @@ public class RandomWalkSim2 {
         PartOfAdjTableMap = null;
         RDFGraph graphRandom = new RDFGraph();
         System.out.println("子图框定消耗的时间：" + (System.currentTimeMillis()-bfsStartTime) + "ms");
+        System.out.println("time0:" + totalTime0 + "ms");
+        System.out.println("time0_1:" + totalTime0_1 + "ms");
+        System.out.println("time1:" + totalTime1 + "ms");
+        System.out.println("time2:" + totalTime2 + "ms");
+        System.out.println("time3:" + totalTime3 + "ms");
+        System.out.println("time4:" + totalTime4 + "ms");
+        System.out.println("totaltestTime:" + totaltestTime + "ms");
 //        /***导出一份到文件*/
 //        List<String> entity_txt = new ArrayList<>();
 //        List<String> edge_txt = new ArrayList<>();
