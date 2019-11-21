@@ -126,7 +126,7 @@ public class Util {
             writer = new BufferedWriter(new FileWriter(file));
             int count = 0;
             for(Object obj:collection){
-                System.out.println("count " + count);
+//                System.out.println("count " + count);
                 count++;
                 if (count < collection.size()){
                     writer.write(obj.toString());
