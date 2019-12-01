@@ -30,11 +30,8 @@ public class ojalgo2 {
 
     public static void main(final String[] args) {
         final int dim = 3;
-        final SparseStore<Double> mtrxA = SparseStore.PRIMITIVE.make(1, dim);
-        final SparseStore<Double> mtrxB = SparseStore.PRIMITIVE.make(dim, dim);
-        final SparseStore<Double> mtrxC = SparseStore.PRIMITIVE.make(dim, dim);
-        final MatrixStore<Double> mtrxZ = MatrixStore.PRIMITIVE.makeZero(dim, dim).get();
-        final MatrixStore<Double> mtrxI = MatrixStore.PRIMITIVE.makeIdentity(dim).get();
+        SparseStore<Double> entity = SparseStore.PRIMITIVE.make(1, dim);
+        SparseStore<Double> work = SparseStore.PRIMITIVE.make(dim, dim);
 
         // 5 matrices * 100k rows * 100k cols * 8 bytes per element => would be more than 372GB if dense
         // This program runs with default settings of any JVM
@@ -44,21 +41,30 @@ public class ojalgo2 {
 //            final double val = RANDOM.nextDouble();
 //            mtrxA.set(i, j, val);
 //        } // Each row of A contains 1 non-zero element at random column
-        mtrxA.set(0,0,0.1);
-        mtrxA.set(0,1,0.2);
-        mtrxA.set(0,2,0.7);
-        mtrxB.set(0,0,0.9);
-        mtrxB.set(0,1,0.075);
-        mtrxB.set(0,2,0.025);
-        mtrxB.set(1,0,0.15);
-        mtrxB.set(1,1,0.8);
-        mtrxB.set(1,2,0.05);
-        mtrxB.set(2,0,0.25);
-        mtrxB.set(2,1,0.25);
-        mtrxB.set(2,2,0.5);
-        System.out.println(mtrxA);
-        System.out.println(mtrxB);
-        System.out.println(mtrxA.multiply(mtrxB));
+        entity.set(0,0,0.1);
+        entity.set(0,1,0.2);
+        entity.set(0,2,0.7);
+        work.set(0,0,0.9);
+        work.set(0,1,0.075);
+        work.set(0,2,0.025);
+        work.set(1,0,0.15);
+        work.set(1,1,0.8);
+        work.set(1,2,0.05);
+        work.set(2,0,0.25);
+        work.set(2,1,0.25);
+        work.set(2,2,0.5);
+
+        int i = 0;
+        while (true) {
+            MatrixStore<Double> tmp = entity.multiply(work);
+            if (isEqual2(entity, tmp)) {
+                break;
+            }
+            entity = (SparseStore<Double>) tmp;
+            i++;
+        }
+        System.out.println(entity);
+        System.out.println(i);
 
 
 //        for (int i = 0 ; i < 50 ; ++i) {
@@ -134,5 +140,13 @@ public class ojalgo2 {
 //        LongToNumberMap.factory(Primitive64Array.FACTORY).make();
 //        BasicSeries.INSTANT.build(Primitive64Array.FACTORY);
 //        new ConjugateGradientSolver();
+    }
+    public static boolean isEqual2(MatrixStore<Double> entity, MatrixStore<Double> tmp) {
+        for (int i = 0 ; i < entity.countColumns(); ++i) {
+            if (Math.abs(entity.get(0, i)-tmp.get(0, i)) > 0.0001) {
+                return false;
+            }
+        }
+        return true;
     }
 }
