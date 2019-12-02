@@ -3,7 +3,6 @@ package com.MatrixATest;
 import org.ojalgo.array.LongToNumberMap;
 import org.ojalgo.array.Primitive64Array;
 import org.ojalgo.array.SparseArray;
-import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 import org.ojalgo.matrix.store.MatrixStore;
 import org.ojalgo.matrix.store.PhysicalStore;
@@ -15,6 +14,7 @@ import org.ojalgo.random.Weibull;
 import org.ojalgo.series.BasicSeries;
 import org.ojalgo.type.CalendarDateUnit;
 import org.ojalgo.type.Stopwatch;
+import org.ojalgo.type.context.NumberContext;
 
 import java.util.Random;
 
@@ -25,22 +25,12 @@ import java.util.Random;
  * @Modified By:
  */
 public class ojalgo2 {
-    private static final String NON_ZEROS = "{} non-zeroes out of {} matrix elements calculated in {}";
-    private static final Random RANDOM = new Random();
 
     public static void main(final String[] args) {
         final int dim = 3;
         SparseStore<Double> entity = SparseStore.PRIMITIVE.make(1, dim);
         SparseStore<Double> work = SparseStore.PRIMITIVE.make(dim, dim);
 
-        // 5 matrices * 100k rows * 100k cols * 8 bytes per element => would be more than 372GB if dense
-        // This program runs with default settings of any JVM
-
-//        for (int i = 0; i < dim; i++) {
-//            final int j = RANDOM.nextInt(dim);
-//            final double val = RANDOM.nextDouble();
-//            mtrxA.set(i, j, val);
-//        } // Each row of A contains 1 non-zero element at random column
         entity.set(0,0,0.1);
         entity.set(0,1,0.2);
         entity.set(0,2,0.7);
@@ -54,18 +44,22 @@ public class ojalgo2 {
         work.set(2,1,0.25);
         work.set(2,2,0.5);
 
+        long startTime = System.currentTimeMillis();
         int i = 0;
         while (true) {
-            MatrixStore<Double> tmp = entity.multiply(work);
-            if (isEqual2(entity, tmp)) {
+            SparseStore<Double> tmp = (SparseStore<Double>) entity.multiply(work);
+            if (entity.equals(tmp, new NumberContext(7, 1))) {
                 break;
             }
-            entity = (SparseStore<Double>) tmp;
+//            if (isEqual2(entity, tmp)) {
+//                break;
+//            }
+            entity = tmp;
             i++;
+            System.out.println(i);
         }
-        System.out.println(entity);
+        System.out.println((System.currentTimeMillis()- startTime) + "ms");
         System.out.println(i);
-
 
 //        for (int i = 0 ; i < 50 ; ++i) {
 //            MatrixStore<Double> multiply = mtrxA.multiply(mtrxB);
@@ -143,7 +137,7 @@ public class ojalgo2 {
     }
     public static boolean isEqual2(MatrixStore<Double> entity, MatrixStore<Double> tmp) {
         for (int i = 0 ; i < entity.countColumns(); ++i) {
-            if (Math.abs(entity.get(0, i)-tmp.get(0, i)) > 0.0001) {
+            if (Math.abs(entity.get(0, i)-tmp.get(0, i)) > 0.0000001) {
                 return false;
             }
         }

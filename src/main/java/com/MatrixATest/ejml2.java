@@ -47,18 +47,29 @@ public class ejml2 {
 
         DMatrixSparseCSC entity = new DMatrixSparseCSC(1,16094,16094);
         DMatrixSparseCSC work = new DMatrixSparseCSC(16094,16094,76468);
+//        double [][]a = new double[16094][16094];
         List<String> Transmit = Util.readFileAbsolute("D:\\dbpedia_all_graph\\randomWalkTest\\trans.txt");
 //        for (int i = 0 ; i < entity.getNumCols() ; ++i) {
 //            entity.set(0, i, 1.0/14610);
 //        }
         entity.set(0, 13520, 1.0);
+
+//        DMatrixRMaj aa = new DMatrixRMaj(a);
+
+
+        long s = System.currentTimeMillis();
         for (String each : Transmit) {
             String[] split = each.split("\t");
             int x = Integer.valueOf(split[0]);
             int y = Integer.valueOf(split[1]);
             double vv = Double.valueOf(split[2]);
+//            a[x][y] = vv;
             work.set(x, y, vv);
         }
+        System.out.println("set的时间：" + (System.currentTimeMillis() - s));
+
+
+
         DMatrixSparseCSC tmp = new DMatrixSparseCSC(1,16094,16094);
         long startTime = System.currentTimeMillis();
         int i = 0;
@@ -67,6 +78,9 @@ public class ejml2 {
             if (isEqual(entity, tmp)) {
                 break;
             }
+//            if (i == 299) {
+//                break;
+//            }
             entity.set(tmp);
 //            System.out.println(entity.nz_length);
 //            System.out.println(entity.get(0,8075));
