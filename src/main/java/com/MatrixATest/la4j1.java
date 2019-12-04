@@ -3,6 +3,7 @@ package com.MatrixATest;
 import com.util.Util;
 import org.la4j.Matrix;
 import org.la4j.matrix.SparseMatrix;
+import org.la4j.matrix.sparse.CRSMatrix;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class la4j1 {
      * @param tmp
      * @return
      */
-    public static boolean isEqual(Matrix entity, Matrix tmp) {
+    public static boolean isEqual(CRSMatrix entity, CRSMatrix tmp) {
         for (int i = 0 ; i < entity.columns() ; ++i) {
             if (Math.abs(entity.get(0, i)-tmp.get(0, i)) > 0.0001) {
                 return false;
@@ -29,10 +30,11 @@ public class la4j1 {
     }
 
     public static void main(String[] args) {
-        double [][]a_entity = new double[1][16094];
-        double [][]a_work = new double[16094][16094];
+        double [][]a_entity = new double[1][20139];
+        double [][]a_work = new double[20139][20139];
 
         List<String> Transmit = Util.readFileAbsolute("D:\\dbpedia_all_graph\\randomWalkTest\\trans.txt");
+        long s = System.currentTimeMillis();
         for (String each : Transmit) {
             String[] split = each.split("\t");
             int x = Integer.valueOf(split[0]);
@@ -40,17 +42,21 @@ public class la4j1 {
             double vv = Double.valueOf(split[2]);
             a_work[x][y] = vv;
         }
-        a_entity[0][13520] = 1.0;
-        long s = System.currentTimeMillis();
-        SparseMatrix entity = SparseMatrix.from2DArray(a_entity);
-        SparseMatrix work = SparseMatrix.from2DArray(a_work);
-        SparseMatrix tmp;
+        a_entity[0][16452] = 1.0;
+//        SparseMatrix entity = SparseMatrix.from2DArray(a_entity);
+//        SparseMatrix work = SparseMatrix.from2DArray(a_work);
+//        SparseMatrix tmp;
+
+        CRSMatrix entity = CRSMatrix.from2DArray(a_entity);
+        CRSMatrix work = CRSMatrix.from2DArray(a_work);
+        CRSMatrix tmp;
+
         System.out.println("set的时间：" + (System.currentTimeMillis() - s));
 
         long startTime = System.currentTimeMillis();
         int i = 0;
         while (true) {
-            tmp = entity.multiply(work).toSparseMatrix();
+            tmp = (CRSMatrix) entity.multiply(work);
             if (isEqual(entity, tmp)) {
                 break;
             }

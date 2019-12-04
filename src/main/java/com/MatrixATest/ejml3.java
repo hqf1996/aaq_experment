@@ -35,11 +35,11 @@ public class ejml3 {
 //        DMatrixSparseCSC work = new DMatrixSparseCSC(16094,16094,76468);
 //        DMatrixSparseCSC tmp = new DMatrixSparseCSC(16094,16094,76468);
 
-        double[][] a_entity = new double[1][16094];
-        double[][] a_work = new double[16094][16094];
+//        double[][] a_entity = new double[1][20139];
+        double[][] a_work = new double[20139][20139];
 //        double [][]a_tmp = new double[16094][16094];
         List<String> Transmit = Util.readFileAbsolute("D:\\dbpedia_all_graph\\randomWalkTest\\trans.txt");
-        a_entity[0][13520] = 1.0;
+//        a_entity[0][16452] = 1.0;
         long start = System.currentTimeMillis();
         for (String each : Transmit) {
             String[] split = each.split("\t");
@@ -51,25 +51,25 @@ public class ejml3 {
         }
         System.out.println(System.currentTimeMillis() - start);
         start = System.currentTimeMillis();
-        DMatrixRMaj entity = new DMatrixRMaj(a_entity);
+//        DMatrixRMaj entity = new DMatrixRMaj(a_entity);
         DMatrixRMaj work = new DMatrixRMaj(a_work);
         System.out.println(System.currentTimeMillis() - start);
 //        System.out.println(work.get(4066, 4093));
-        DMatrixRMaj tmp = new DMatrixRMaj(16094, 16094);
-//        CommonOps_DDRM.mult(entity, work, tmp);
-
-        long startTime = System.currentTimeMillis();
-        int i = 0;
-        while (true) {
-            CommonOps_DDRM.mult(entity, work, tmp);
-            if (isEqual(entity, tmp)) {
-                break;
-            }
-            entity.set(tmp);
-            i++;
-            System.out.println(i);
-        }
-        System.out.println("总共消耗时间为：" + (System.currentTimeMillis() - startTime) + "ms");
-        System.out.println(i);
+//        DMatrixRMaj tmp = new DMatrixRMaj(20139, 20139);
+////        CommonOps_DDRM.mult(entity, work, tmp);
+//
+//        long startTime = System.currentTimeMillis();
+//        int i = 0;
+//        while (true) {
+//            CommonOps_DDRM.mult(entity, work, tmp);
+//            if (isEqual(entity, tmp)) {
+//                break;
+//            }
+//            entity.set(tmp);
+//            i++;
+//            System.out.println(i);
+//        }
+//        System.out.println("总共消耗时间为：" + (System.currentTimeMillis() - startTime) + "ms");
+//        System.out.println(i);
     }
 }

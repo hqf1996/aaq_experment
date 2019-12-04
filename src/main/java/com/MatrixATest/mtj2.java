@@ -1,26 +1,22 @@
 package com.MatrixATest;
 
 import com.util.Util;
-import org.ojalgo.matrix.store.MatrixStore;
-import org.ojalgo.matrix.store.SparseStore;
+import no.uib.cipr.matrix.sparse.LinkedSparseMatrix;
 
 import java.util.List;
 
 /**
  * @Author: hqf
  * @description:
- * @Data: Create in 14:48 2019/12/2
+ * @Data: Create in 10:55 2019/12/4
  * @Modified By:
  */
-public class ojalgo3 {
+public class mtj2 {
     public static void main(String[] args) {
-
-        final int dim = 20139;
-        SparseStore<Double> entity = SparseStore.PRIMITIVE.make(1, 20139);
-        SparseStore<Double> work = SparseStore.PRIMITIVE.make(20139, 20139);
-        SparseStore<Double> tmp = SparseStore.PRIMITIVE.make(1, 20139);
-
+        LinkedSparseMatrix entity = new LinkedSparseMatrix(1, 20139);
+        LinkedSparseMatrix work = new LinkedSparseMatrix(20139, 20139);
         List<String> Transmit = Util.readFileAbsolute("D:\\dbpedia_all_graph\\randomWalkTest\\trans.txt");
+        entity.set(0, 16452, 1.0);
         long s = System.currentTimeMillis();
         for (String each : Transmit) {
             String[] split = each.split("\t");
@@ -29,29 +25,26 @@ public class ojalgo3 {
             double vv = Double.valueOf(split[2]);
             work.set(x, y, vv);
         }
-        entity.set(0, 16452, 1.0);
         System.out.println("set的时间：" + (System.currentTimeMillis() - s));
 
+        LinkedSparseMatrix tmp = new LinkedSparseMatrix(1, 20139);
         long startTime = System.currentTimeMillis();
         int i = 0;
         while (true) {
-            entity.multiply(work, tmp);
-//            if (entity.equals(tmp, new NumberContext(7, 1))) {
-//                break;
-//            }
+            entity.mult(work, tmp);
             if (isEqual2(entity, tmp)) {
                 break;
             }
-            tmp.supplyTo(entity);
+            entity.set(tmp);
             i++;
-//            System.out.println(i);
+            System.out.println(i);
         }
         System.out.println((System.currentTimeMillis()- startTime) + "ms");
         System.out.println(i);
     }
 
-    public static boolean isEqual2(MatrixStore<Double> entity, MatrixStore<Double> tmp) {
-        for (int i = 0 ; i < entity.countColumns(); ++i) {
+    public static boolean isEqual2(LinkedSparseMatrix entity, LinkedSparseMatrix tmp) {
+        for (int i = 0 ; i < entity.numColumns(); ++i) {
             if (Math.abs(entity.get(0, i)-tmp.get(0, i)) > 0.0001) {
                 return false;
             }

@@ -48,18 +48,19 @@ public class ojalgo2 {
         int i = 0;
         while (true) {
             SparseStore<Double> tmp = (SparseStore<Double>) entity.multiply(work);
-            if (entity.equals(tmp, new NumberContext(7, 1))) {
-                break;
-            }
-//            if (isEqual2(entity, tmp)) {
+//            if (entity.equals(tmp, new NumberContext(7, 1))) {
 //                break;
 //            }
+            if (isEqual2(entity, tmp)) {
+                break;
+            }
             entity = tmp;
             i++;
-            System.out.println(i);
+//            System.out.println(i);
         }
         System.out.println((System.currentTimeMillis()- startTime) + "ms");
         System.out.println(i);
+        System.out.println(entity);
 
 //        for (int i = 0 ; i < 50 ; ++i) {
 //            MatrixStore<Double> multiply = mtrxA.multiply(mtrxB);
@@ -137,7 +138,7 @@ public class ojalgo2 {
     }
     public static boolean isEqual2(MatrixStore<Double> entity, MatrixStore<Double> tmp) {
         for (int i = 0 ; i < entity.countColumns(); ++i) {
-            if (Math.abs(entity.get(0, i)-tmp.get(0, i)) > 0.0000001) {
+            if (Math.abs(entity.get(0, i)-tmp.get(0, i)) > 0.0001) {
                 return false;
             }
         }
